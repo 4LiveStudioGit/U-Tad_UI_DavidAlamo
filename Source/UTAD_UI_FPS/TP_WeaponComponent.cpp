@@ -11,6 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Components/ProgressBar.h"
+#include "UI/PlayerHUD.h"
 
 #define RELOAD_TIME 1.f
 
@@ -28,8 +30,9 @@ void UTP_WeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	if (bIsReloading)
 	{
 		ReloadTimer += DeltaTime;
-		// To test ReloadTimer
-		// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), ReloadTimer));
+
+	 //To test ReloadTimer
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), ReloadTimer));
 	}
 }
 
@@ -83,6 +86,7 @@ void UTP_WeaponComponent::Fire()
 	}
 
 	--CurrentNumBullets;
+	OnCurrentNumBulletsChanged.ExecuteIfBound(CurrentNumBullets);
 }
 
 void UTP_WeaponComponent::StartReload()
@@ -94,6 +98,7 @@ void UTP_WeaponComponent::StartReload()
 
 	int playerBullets = Character->GetTotalBullets();
 	playerBullets += CurrentNumBullets;
+	DrawDebugSphere(GetWorld(),GetOwner()->GetActorLocation(),50,12,FColor::Red,true,2.f);
 
 	if (playerBullets <= CurrentNumBullets || CurrentNumBullets == MagazineSize)
 	{

@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "UI/ReloadBar.h"
 #include "TP_WeaponComponent.generated.h"
 
 class AUTAD_UI_FPSCharacter;
+
+DECLARE_DELEGATE_OneParam(FOnCurrentNumBulletsChanged, int /*CurrentNumBullets*/);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UTAD_UI_FPS_API UTP_WeaponComponent : public USkeletalMeshComponent
@@ -14,6 +17,8 @@ class UTAD_UI_FPS_API UTP_WeaponComponent : public USkeletalMeshComponent
 	GENERATED_BODY()
 
 public:
+	FOnCurrentNumBulletsChanged OnCurrentNumBulletsChanged;
+	
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AUTAD_UI_FPSProjectile> ProjectileClass;
@@ -100,7 +105,10 @@ private:
 	/** The Character holding this weapon*/
 	AUTAD_UI_FPSCharacter* Character;
 
-	float ReloadTimer;
+
+	UPROPERTY(meta = (BindWidget))
+	UReloadBar* ReloadBar;
 
 	bool bIsReloading;
+	float ReloadTimer;
 };

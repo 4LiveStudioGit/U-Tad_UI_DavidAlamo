@@ -10,6 +10,7 @@
 
 // UI
 #include "Blueprint/UserWidget.h"
+#include "UI/GameOver.h"
 #include "UI/PlayerHUD.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -120,6 +121,16 @@ void AUTAD_UI_FPSCharacter::SetHealth(int NewHealth)
 	if (ClampedNewHealth != Health)
 	{
 		Health = ClampedNewHealth;
+
+		if (Health <= 0)
+		{
+			if(GameOverWidget)
+			{
+				GameOverInstance = CreateWidget<UGameOver>(GetWorld(), GameOverWidget);
+				GameOverInstance->AddToViewport();
+				GameOverInstance->Show();
+			}
+		}
 	}
 }
 
@@ -141,7 +152,11 @@ int AUTAD_UI_FPSCharacter::GetMaxHealth()
 void AUTAD_UI_FPSCharacter::SetHasRifle(bool bNewHasRifle)
 {
 	bHasRifle = bNewHasRifle;
-	PlayerHUDInstance->ShowAll();
+	if(bHasRifle)
+	{
+		PlayerHUDInstance->ShowAll();
+		OnTotalBulletsChanged.ExecuteIfBound(TotalBullets);
+	}
 }
 
 bool AUTAD_UI_FPSCharacter::GetHasRifle()
@@ -152,6 +167,8 @@ bool AUTAD_UI_FPSCharacter::GetHasRifle()
 void AUTAD_UI_FPSCharacter::SetTotalBullets(int NewTotalBullets)
 {
 	TotalBullets = NewTotalBullets;
+	OnTotalBulletsChanged.ExecuteIfBound(TotalBullets);
+	
 }
 
 int AUTAD_UI_FPSCharacter::GetTotalBullets()

@@ -15,6 +15,7 @@ class UTAD_UI_FPS_API UReloadBar : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Show();
@@ -24,5 +25,11 @@ public:
 
 private:
 
+	UFUNCTION(BlueprintCallable, Category="Reload")
 	void UpdateReloadBarValue(float NewValue);
+
+public:
+
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* ReloadBar;
 };

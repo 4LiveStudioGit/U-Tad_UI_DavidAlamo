@@ -7,5 +7,6 @@
 
 void UEnemyHealthBar::UpdateEnemyHealthBarValue(int Value, int MaxValue)
 {
-
+	float percentage = static_cast<float>(Value) / static_cast<float>(MaxValue);
+	EnemyHealthBar->SetPercent(percentage);
 }

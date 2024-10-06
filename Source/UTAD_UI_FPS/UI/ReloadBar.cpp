@@ -6,6 +6,15 @@
 #include "../TP_WeaponComponent.h"
 #include "Components/ProgressBar.h"
 
+void UReloadBar::NativeConstruct()
+{
+	Super::NativeConstruct();
+	if(ReloadBar)
+		{
+			ReloadBar->SetPercent(100.f);
+		}
+}
+
 void UReloadBar::Show()
 {
 	SetVisibility(ESlateVisibility::HitTestInvisible);
@@ -18,5 +27,8 @@ void UReloadBar::Hide()
 
 void UReloadBar::UpdateReloadBarValue(float NewValue)
 {
-
+	if(ReloadBar)
+	{
+		ReloadBar->SetPercent(NewValue);
+	}
 }

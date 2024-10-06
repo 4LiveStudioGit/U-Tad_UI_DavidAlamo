@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "UTAD_UI_FPSCharacter.generated.h"
 
+class UGameOver;
 class UInputComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
@@ -16,6 +17,8 @@ class UTP_WeaponComponent;
 struct FInputActionValue;
 
 class UPlayerHUD;
+
+DECLARE_DELEGATE_OneParam(FOnTotalBulletsChanged, int /*TotalBullets*/);
 
 UCLASS(config=Game)
 class AUTAD_UI_FPSCharacter : public ACharacter
@@ -113,6 +116,8 @@ public:
 
 	void SetAttachedWeaponComponent(UTP_WeaponComponent* WeaponComponent);
 
+	FOnTotalBulletsChanged OnTotalBulletsChanged;
+
 	/****************************************************/
 	/************************ UI ************************/
 	/****************************************************/
@@ -120,6 +125,10 @@ public:
 	/** Widget Blueprints that will be used to create the instances */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
 	TSubclassOf<UPlayerHUD> PlayerHUDWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
+	TSubclassOf<UGameOver> GameOverWidget;
+	
 
 protected:
 	/** Called for movement input */
@@ -148,6 +157,9 @@ private:
 	/****************************************************/
 
 	/** Instances that will be created and showed on viewport */
+	UPROPERTY()
 	UPlayerHUD* PlayerHUDInstance;
+	UPROPERTY()
+	UGameOver* GameOverInstance;
 };
 

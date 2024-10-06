@@ -9,15 +9,28 @@
 
 void UPlayerHUD::ShowNoWeapon()
 {
-
+	AmmoCounterWidget->Hide();
+	CrosshairWidget->Hide();
+	PlayerHealthBarWidget->Show();
+	ReloadBarWidget->Hide();
+	MiniMapWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+	
 }
 
 void UPlayerHUD::ShowAll()
 {
-
+	AmmoCounterWidget->Show();
+	CrosshairWidget->Show();
+	PlayerHealthBarWidget->Show();
+	ReloadBarWidget->Show();
+	MiniMapWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
 }
 
 void UPlayerHUD::Hide()
 {
-
+	AmmoCounterWidget->Hide();
+	CrosshairWidget->Hide();
+	PlayerHealthBarWidget->Hide();
+	ReloadBarWidget->Hide();
+	MiniMapWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
