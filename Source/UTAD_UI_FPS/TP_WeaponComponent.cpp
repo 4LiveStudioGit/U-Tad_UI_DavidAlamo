@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "UTAD_UI_FPS_Enemy.h"
 
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
@@ -33,6 +34,22 @@ void UTP_WeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 	 //To test ReloadTimer
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), ReloadTimer));
+	}
+
+	FHitResult HitResult;
+	FVector LineStart = GetForwardVector()*100;
+	FVector LineEnd = GetRelativeLocation() + LineStart *1000;
+
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredComponent(this);
+	if (GetWorld()->LineTraceSingleByChannel(HitResult,LineStart,LineEnd,ECC_Visibility))
+	{
+		AUTAD_UI_FPS_Enemy* Enemy = Cast<AUTAD_UI_FPS_Enemy>(HitResult.GetActor());
+		if(Enemy)
+		{
+			int X= 1;
+		}
+		
 	}
 }
 

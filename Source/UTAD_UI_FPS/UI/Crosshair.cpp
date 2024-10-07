@@ -24,6 +24,12 @@ void UCrosshair::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	
+}
+
+void UCrosshair::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
 	if(!WeaponDelegateBound)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -41,4 +47,5 @@ void UCrosshair::NativeConstruct()
 void UCrosshair::playanim()
 {
 	PlayAnimation(Fire);
+	
 }

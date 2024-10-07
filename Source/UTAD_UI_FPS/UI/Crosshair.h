@@ -27,6 +27,7 @@ public:
 
 private:
 	virtual void NativeConstruct() override;;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	void playanim();
 	bool WeaponDelegateBound = false;
 };
