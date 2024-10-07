@@ -121,7 +121,8 @@ void AUTAD_UI_FPSCharacter::SetHealth(int NewHealth)
 	if (ClampedNewHealth != Health)
 	{
 		Health = ClampedNewHealth;
-
+		OnHealthChanged.ExecuteIfBound(Health, MaxHealth);
+	
 		if (Health <= 0)
 		{
 			if(GameOverWidget)

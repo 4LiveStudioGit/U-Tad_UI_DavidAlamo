@@ -10,6 +10,7 @@
 class AUTAD_UI_FPSCharacter;
 
 DECLARE_DELEGATE_OneParam(FOnCurrentNumBulletsChanged, int /*CurrentNumBullets*/);
+DECLARE_DELEGATE(FFireWeapon);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UTAD_UI_FPS_API UTP_WeaponComponent : public USkeletalMeshComponent
@@ -18,6 +19,7 @@ class UTAD_UI_FPS_API UTP_WeaponComponent : public USkeletalMeshComponent
 
 public:
 	FOnCurrentNumBulletsChanged OnCurrentNumBulletsChanged;
+	FFireWeapon OnFireWeapon;
 	
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)

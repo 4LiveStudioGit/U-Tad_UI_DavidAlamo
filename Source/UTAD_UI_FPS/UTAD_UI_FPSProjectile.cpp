@@ -7,7 +7,7 @@
 #include "UTAD_UI_FPSCharacter.h"
 #include "UTAD_UI_FPS_Enemy.h"
 
-#define DAMAGE 100
+#define DAMAGE 10
 
 AUTAD_UI_FPSProjectile::AUTAD_UI_FPSProjectile() 
 {

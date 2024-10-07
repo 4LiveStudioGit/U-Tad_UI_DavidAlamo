@@ -8,7 +8,9 @@
 void UGameOver::Show()
 {
 	APlayerController* PlayerController = GetOwningPlayer<APlayerController>();
-	PlayerController->SetInputMode(FInputModeUIOnly());
+	FInputModeUIOnly InputMode;
+	InputMode.SetWidgetToFocus(TakeWidget());
+	PlayerController->SetInputMode(InputMode);
 	PlayerController->bShowMouseCursor = true;
 	PlayerController->Pause();
 	TryAgainButton->SetFocus();

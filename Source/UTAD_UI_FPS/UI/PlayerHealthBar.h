@@ -22,16 +22,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Hide();
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UProgressBar* PlayerHealthBar;
+
 protected:
 
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	virtual void NativeConstruct() override;
 
 private:
 
 	float BlinkTimer = 0.f;
 	bool bIsLowHealth = false;
 	bool bBlinkTurningRed = true;
+	FProgressBarStyle HealthBarStyle;
 
+protected:
 	void UpdatePlayerHealthBar(int NewHealth, int MaxHealth);
 
 	void LowHealthBlink();

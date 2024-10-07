@@ -17,6 +17,8 @@ class UTAD_UI_FPS_API UGameOver : public UUserWidget
 
 public:
 
+	virtual void NativeConstruct() override;
+	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* TryAgainButton;
 
@@ -25,10 +27,11 @@ public:
 
 	void Show();
 
-protected:
-	virtual void NativeConstruct() override;
+
 private:
-	
+
+	UFUNCTION()
 	void TryAgain();
+	UFUNCTION()
 	void Quit();
 };

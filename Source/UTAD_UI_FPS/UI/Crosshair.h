@@ -21,4 +21,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Hide();
+	
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* Fire;
+
+private:
+	virtual void NativeConstruct() override;;
+	void playanim();
+	bool WeaponDelegateBound = false;
 };

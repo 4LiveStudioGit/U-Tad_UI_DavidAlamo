@@ -65,6 +65,9 @@ void UTP_WeaponComponent::Fire()
 	
 			// Spawn the projectile at the muzzle
 			World->SpawnActor<AUTAD_UI_FPSProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+
+			//Delegate for Fire
+			OnFireWeapon.ExecuteIfBound();
 		}
 	}
 	
