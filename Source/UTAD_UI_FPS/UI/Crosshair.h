@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Image.h"
 #include "Crosshair.generated.h"
 
+class UImage;
 /**
  * 
  */
@@ -25,9 +27,15 @@ public:
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	UWidgetAnimation* Fire;
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UImage* Crosshair;
+
 private:
 	virtual void NativeConstruct() override;;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-	void playanim();
+
+
+	void PlayAnim();
+	void ChangeColor(bool CrosshairOverEnemy);
 	bool WeaponDelegateBound = false;
 };

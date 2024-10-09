@@ -20,6 +20,8 @@ class UPlayerHUD;
 
 DECLARE_DELEGATE_OneParam(FOnTotalBulletsChanged, int /*TotalBullets*/);
 DECLARE_DELEGATE_TwoParams(FOnHealthChanged, int /*Health*/,int/*MaxHealth*/);
+DECLARE_DELEGATE(FPlayerHit/*PlayerHit*/);
+DECLARE_DELEGATE_OneParam(FCrossOverEnemy, bool /*CrosshairOverEnemy*/);
 
 UCLASS(config=Game)
 class AUTAD_UI_FPSCharacter : public ACharacter
@@ -56,6 +58,7 @@ public:
 
 protected:
 	virtual void BeginPlay();
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 		
@@ -119,6 +122,8 @@ public:
 
 	FOnTotalBulletsChanged OnTotalBulletsChanged;
 	FOnHealthChanged OnHealthChanged;
+	FCrossOverEnemy OnCrosshairOverEnemy;
+	FPlayerHit OnPlayerHit;
 
 
 	/****************************************************/
@@ -132,7 +137,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
 	TSubclassOf<UGameOver> GameOverWidget;
 	
+	UFUNCTION(BlueprintCallable, Category = UI)
+	void CrosshairEnemyDetection();
 
+	
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

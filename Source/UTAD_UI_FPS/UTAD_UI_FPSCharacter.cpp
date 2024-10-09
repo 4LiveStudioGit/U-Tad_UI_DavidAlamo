@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 
 // UI
+#include "UTAD_UI_FPS_Enemy.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/GameOver.h"
 #include "UI/PlayerHUD.h"
@@ -69,6 +70,12 @@ void AUTAD_UI_FPSCharacter::BeginPlay()
 	}
 }
 
+void AUTAD_UI_FPSCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	CrosshairEnemyDetection();
+}
+
 //////////////////////////////////////////////////////////////////////////// Input
 
 void AUTAD_UI_FPSCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -88,6 +95,45 @@ void AUTAD_UI_FPSCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 	}
 }
 
+
+void AUTAD_UI_FPSCharacter::CrosshairEnemyDetection()
+{
+	// Obtener el mundo actual
+	UWorld* World = GetWorld();
+
+	// Establecer el punto final del LineTrace (una distancia en frente del jugador)
+	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+	FVector End = Start + (FirstPersonCameraComponent->GetForwardVector() * 10000.0f); // 10000 unidades hacia adelante
+
+	// Estructura que contendrá el resultado del trace
+	FHitResult HitResult;
+
+	// Parámetros para ignorar ciertos actores, como el jugador
+	FCollisionQueryParams TraceParams(FName(TEXT("CrosshairTrace")), true, this);
+
+	// Realizar el LineTrace
+	bool bHit = World->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, TraceParams);
+
+	// Si impacta algo
+	if (bHit)
+	{
+		// Verificar si el objeto impactado es un enemigo
+		AUTAD_UI_FPS_Enemy* Enemy = Cast<AUTAD_UI_FPS_Enemy>(HitResult.GetActor());
+		if (Enemy )
+		{
+			OnCrosshairOverEnemy.ExecuteIfBound(true);
+		}
+		else
+		{
+			OnCrosshairOverEnemy.ExecuteIfBound(false);
+		}
+	}
+	else
+		{
+			OnCrosshairOverEnemy.ExecuteIfBound(false);	
+		}
+	
+}
 
 void AUTAD_UI_FPSCharacter::Move(const FInputActionValue& Value)
 {
@@ -122,6 +168,7 @@ void AUTAD_UI_FPSCharacter::SetHealth(int NewHealth)
 	{
 		Health = ClampedNewHealth;
 		OnHealthChanged.ExecuteIfBound(Health, MaxHealth);
+		OnPlayerHit.ExecuteIfBound();
 	
 		if (Health <= 0)
 		{
