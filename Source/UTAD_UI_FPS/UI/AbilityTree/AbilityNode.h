@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "AbilityNode.generated.h"
 
+class UImage;
 /**
  * 
  */
@@ -22,6 +23,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill Node")
 	bool bIsUnlocked = false; 
 
+	//Imagen de la Habilidad
+	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "Skill Node")
+	FSlateBrush ImageNode;
+
 	// Nodo anterior en la rama (nulo si es el primer nodo)
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill Node")
 	UAbilityNode* PreviousNode;  
@@ -35,4 +40,9 @@ public:
 	void Unlock();
 
 	
+	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr <UImage> ImageAbility;
 };
