@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "AbilityNode.generated.h"
 
+class AUTAD_UI_FPSCharacter;
 class UImage;
 /**
  * 
@@ -15,10 +16,6 @@ class UTAD_UI_FPS_API UAbilityNode : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-	// Nombre de la habilidad
-	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "Ability Node")
-	FText NodeName;
-
 	// Indica si el nodo está desbloqueado
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill Node")
 	bool bIsUnlocked = false; 
@@ -39,10 +36,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill Node")
 	void Unlock();
 
-	
-	virtual void NativeConstruct() override;
-	virtual void NativePreConstruct() override;
+	//Boton para interactuar con el nodo
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* ButtonActivateNode;
+
+	//Boton para interactuar con el nodo
+	UPROPERTY(BlueprintReadWrite)
+	int AbilityCost ;
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr <UImage> ImageAbility;
+	
+	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
+private:
+	UFUNCTION()
+	void onclick();
+	
+	TObjectPtr<AUTAD_UI_FPSCharacter> Player
+;
 };

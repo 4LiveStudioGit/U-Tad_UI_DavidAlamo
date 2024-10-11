@@ -140,6 +140,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = UI)
 	void CrosshairEnemyDetection();
 
+	//Puntos para desbloquear habilidades
+	int abilityPoints = 0;
 	
 protected:
 	/** Called for movement input */

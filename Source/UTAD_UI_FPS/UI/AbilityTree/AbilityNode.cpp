@@ -3,7 +3,9 @@
 
 #include "AbilityNode.h"
 
+#include "Components/Button.h"
 #include "Components/Image.h"
+#include "UTAD_UI_FPS/UTAD_UI_FPSCharacter.h"
 
 bool UAbilityNode::CanUnlock()
 {
@@ -14,16 +16,37 @@ bool UAbilityNode::CanUnlock()
 
 void UAbilityNode::Unlock()
 {
+	if(CanUnlock())
+	{
+		Player->abilityPoints -= AbilityCost;
+	}
 }
 
 void UAbilityNode::NativeConstruct()
 {
 	Super::NativeConstruct();
+	ButtonActivateNode->OnClicked.AddDynamic(this, &UAbilityNode::onclick);
 	
 }
 
 void UAbilityNode::NativePreConstruct()
 {
 	Super::NativePreConstruct();
-	ImageAbility.Get()->SetBrush(ImageNode);
+	ImageNode.SetResourceObject(ImageAbility);
+	ImageAbility->SetBrush(ImageNode);
+	Player = Cast<AUTAD_UI_FPSCharacter>(GetOwningPlayer());
+	
+	
+}
+
+void UAbilityNode::onclick()
+{
+		if(Player)
+		{
+			if(Player->abilityPoints > AbilityCost)
+			{
+				Unlock();
+			}
+		}
+	
 }
