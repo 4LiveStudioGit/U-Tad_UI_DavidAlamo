@@ -11,8 +11,10 @@
 // UI
 #include "UTAD_UI_FPS_Enemy.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "UI/GameOver.h"
 #include "UI/PlayerHUD.h"
+#include "UI/AbilityTree/AblityTree.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AUTAD_UI_FPSCharacter
@@ -92,6 +94,9 @@ void AUTAD_UI_FPSCharacter::SetupPlayerInputComponent(class UInputComponent* Pla
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUTAD_UI_FPSCharacter::Look);
+
+		//AbilityTree
+		EnhancedInputComponent->BindAction(AbilityTreeAction, ETriggerEvent::Triggered, this, &AUTAD_UI_FPSCharacter::ToggleAbilityTree);
 	}
 }
 
@@ -133,6 +138,49 @@ void AUTAD_UI_FPSCharacter::CrosshairEnemyDetection()
 			OnCrosshairOverEnemy.ExecuteIfBound(false);	
 		}
 	
+}
+
+void AUTAD_UI_FPSCharacter::ToggleAbilityTree()
+{
+     AbilityTreeInstance = CreateWidget<UAblityTree>(GetWorld(), AbilityTreeWidget);
+	if(AbilityTreeInstance)
+	{
+		AbilityTreeInstance->AddToViewport();
+		AbilityTreeInstance->SetVisibility(ESlateVisibility::Hidden);
+	}
+	if (AbilityTreeInstance)
+	{
+		// Coloca el foco en el primer widget
+		UWidget* FirstWidget = Cast<UWidget>(AbilityTreeInstance->GetWidgetFromName(TEXT("WB_Ammo1")));
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		// Verificamos si está visible y lo alternamos
+		if (AbilityTreeInstance->IsVisible())
+		{
+			AbilityTreeInstance->SetVisibility(ESlateVisibility::Hidden);
+			UWidgetBlueprintLibrary:: SetInputMode_GameOnly(PlayerController,false);
+		}
+		else
+		{
+			AbilityTreeInstance->SetVisibility(ESlateVisibility::Visible);
+			UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(PlayerController,FirstWidget, EMouseLockMode::DoNotLock, false);
+		}
+	}
+}
+
+int32 AUTAD_UI_FPSCharacter::GetAbilityPoints() const
+{
+	return abilityPoints;
+}
+
+bool AUTAD_UI_FPSCharacter::SetAbilityPoints(int32 NewAbilityPoints)
+{
+	if(abilityPoints >= NewAbilityPoints)
+	{
+		abilityPoints -= NewAbilityPoints;
+		OnAbilityPointsChanged.ExecuteIfBound();
+		return true;
+	}
+	return false;
 }
 
 void AUTAD_UI_FPSCharacter::Move(const FInputActionValue& Value)

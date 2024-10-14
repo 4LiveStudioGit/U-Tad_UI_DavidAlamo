@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "UTAD_UI_FPSCharacter.generated.h"
 
+class UAblityTree;
 class UGameOver;
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -22,6 +23,8 @@ DECLARE_DELEGATE_OneParam(FOnTotalBulletsChanged, int /*TotalBullets*/);
 DECLARE_DELEGATE_TwoParams(FOnHealthChanged, int /*Health*/,int/*MaxHealth*/);
 DECLARE_DELEGATE(FPlayerHit/*PlayerHit*/);
 DECLARE_DELEGATE_OneParam(FCrossOverEnemy, bool /*CrosshairOverEnemy*/);
+DECLARE_DELEGATE(FOnAbilityPointsChanged/*AbilityPoints*/);
+
 
 UCLASS(config=Game)
 class AUTAD_UI_FPSCharacter : public ACharacter
@@ -51,6 +54,10 @@ class AUTAD_UI_FPSCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
+
+	/** Open AbilityClass */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* AbilityTreeAction;
 
 	
 public:
@@ -124,6 +131,8 @@ public:
 	FOnHealthChanged OnHealthChanged;
 	FCrossOverEnemy OnCrosshairOverEnemy;
 	FPlayerHit OnPlayerHit;
+	FOnAbilityPointsChanged OnAbilityPointsChanged;
+	
 
 
 	/****************************************************/
@@ -136,12 +145,23 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
 	TSubclassOf<UGameOver> GameOverWidget;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> AbilityTreeWidget;
+
+	UAblityTree* AbilityTreeInstance;
 	
 	UFUNCTION(BlueprintCallable, Category = UI)
 	void CrosshairEnemyDetection();
 
+	void ToggleAbilityTree();
+	
 	//Puntos para desbloquear habilidades
-	int abilityPoints = 0;
+	int32 abilityPoints = 10;
+
+	int32 GetAbilityPoints() const;
+	bool SetAbilityPoints(int32 NewAbilityPoints);
+
 	
 protected:
 	/** Called for movement input */

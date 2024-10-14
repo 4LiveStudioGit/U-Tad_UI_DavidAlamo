@@ -5,7 +5,36 @@
 
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/ProgressBar.h"
+#include "Kismet/GameplayStatics.h"
+#include "Math/UnitConversion.h"
 #include "UTAD_UI_FPS/UTAD_UI_FPSCharacter.h"
+
+void UAbilityNode::NativeConstruct()
+{
+	Super::NativeConstruct();
+	if (TimeBar)
+	{
+		TimeBar->SetVisibility(ESlateVisibility::Collapsed);
+		TimeBar->SetPercent(0.0f);
+	}
+	if (ImageAbility)
+	{
+		ImageNode.SetResourceObject(ImageAbility);
+		ImageAbility->SetBrush(ImageNode);
+	}
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	Player = Cast<AUTAD_UI_FPSCharacter>(PlayerController->GetPawn());
+
+	if (ButtonActivateNode)
+	{
+		ButtonActivateNode->OnPressed.AddDynamic(this, &UAbilityNode::OnButtonPressed);
+		ButtonActivateNode->OnReleased.AddDynamic(this, &UAbilityNode::OnButtonReleased);
+		/*ButtonActivateNode->OnPressed.AddDynamic(this, &UAbilityNode::OnButtonPressed);
+		ButtonActivateNode->OnPressed.AddDynamic(this, &UAbilityNode::OnButtonPressed);
+		*/
+	}
+}
 
 bool UAbilityNode::CanUnlock()
 {
@@ -16,37 +45,53 @@ bool UAbilityNode::CanUnlock()
 
 void UAbilityNode::Unlock()
 {
-	if(CanUnlock())
+	if (CanUnlock())
 	{
-		Player->abilityPoints -= AbilityCost;
+		if (Player->SetAbilityPoints(AbilityCost))
+		{
+			bIsUnlocked = true;
+		}
 	}
 }
 
-void UAbilityNode::NativeConstruct()
+
+
+void UAbilityNode::OnButtonPressed()
 {
-	Super::NativeConstruct();
-	ButtonActivateNode->OnClicked.AddDynamic(this, &UAbilityNode::onclick);
+	if (CanUnlock() && !bIsUnlocked)
+	{
+		GetWorld()->GetTimerManager().SetTimer(HoldTimerHandle, this, &UAbilityNode::IncrementHoldTime, 0.1, true);
+	}
+}
+
+void UAbilityNode::OnButtonReleased()
+{
+	if (HoldTime >= RequiredHoldTime)
+	{
+		Unlock();
+	}
+	HoldTime = 0.0f;
+	GetWorld()->GetTimerManager().ClearTimer(HoldTimerHandle);
+
+	if (TimeBar)
+	{
+		TimeBar->SetVisibility(ESlateVisibility::Collapsed);
+		TimeBar->SetPercent(0.0f);
+	}
 	
 }
 
-void UAbilityNode::NativePreConstruct()
+void UAbilityNode::IncrementHoldTime()
 {
-	Super::NativePreConstruct();
-	ImageNode.SetResourceObject(ImageAbility);
-	ImageAbility->SetBrush(ImageNode);
-	Player = Cast<AUTAD_UI_FPSCharacter>(GetOwningPlayer());
-	
-	
-}
-
-void UAbilityNode::onclick()
-{
-		if(Player)
+	HoldTime += 0.1;
+	if(TimeBar)
+	{
+		TimeBar->SetVisibility(ESlateVisibility::Visible);
+		TimeBar->SetVisibility(ESlateVisibility::HitTestInvisible);
+		TimeBar->SetPercent(HoldTime / RequiredHoldTime);
+		if(TimeBar->GetPercent() >= 1)
 		{
-			if(Player->abilityPoints > AbilityCost)
-			{
-				Unlock();
-			}
+			TimeBar->SetFillColorAndOpacity(FLinearColor::Red);
 		}
-	
+	}
 }

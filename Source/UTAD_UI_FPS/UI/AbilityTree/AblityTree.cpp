@@ -3,13 +3,7 @@
 
 #include "AblityTree.h"
 
-#include "AbilityNode.h"
+#include "Kismet/GameplayStatics.h"
+#include "UTAD_UI_FPS/UTAD_UI_FPSCharacter.h"
 
-void UAblityTree::InitializeSkillTree()
-{
-}
 
-void UAblityTree::UnlockSkillNode(UAbilityNode* SkillNode)
-{
-	SkillNode->Unlock();
-}
