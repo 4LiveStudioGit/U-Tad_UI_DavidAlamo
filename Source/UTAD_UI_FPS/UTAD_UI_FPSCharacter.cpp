@@ -48,9 +48,9 @@ void AUTAD_UI_FPSCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
+	PlayerController = Cast<APlayerController>(Controller);
 	//Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	if ( PlayerController )
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -142,29 +142,27 @@ void AUTAD_UI_FPSCharacter::CrosshairEnemyDetection()
 
 void AUTAD_UI_FPSCharacter::ToggleAbilityTree()
 {
-     AbilityTreeInstance = CreateWidget<UAblityTree>(GetWorld(), AbilityTreeWidget);
-	if(AbilityTreeInstance)
+	if(!AbilityTreeInstance)
 	{
-		AbilityTreeInstance->AddToViewport();
-		AbilityTreeInstance->SetVisibility(ESlateVisibility::Hidden);
-	}
-	if (AbilityTreeInstance)
-	{
+		AbilityTreeInstance = CreateWidget<UAblityTree>(GetWorld(), AbilityTreeWidget);
+		AbilityTreeInstance->AddToViewport(1);
+		AbilityTreeInstance->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 		// Coloca el foco en el primer widget
-		UWidget* FirstWidget = Cast<UWidget>(AbilityTreeInstance->GetWidgetFromName(TEXT("WB_Ammo1")));
-		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-		// Verificamos si está visible y lo alternamos
-		if (AbilityTreeInstance->IsVisible())
-		{
-			AbilityTreeInstance->SetVisibility(ESlateVisibility::Hidden);
-			UWidgetBlueprintLibrary:: SetInputMode_GameOnly(PlayerController,false);
-		}
-		else
-		{
-			AbilityTreeInstance->SetVisibility(ESlateVisibility::Visible);
-			UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(PlayerController,FirstWidget, EMouseLockMode::DoNotLock, false);
-		}
+		FirstWidget = Cast<UWidget>(AbilityTreeInstance->GetWidgetFromName(TEXT("WB_Ammo1")));
+		PlayerController = Cast<APlayerController>(GetController());
+		PlayerController->SetShowMouseCursor(true);
+		UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(PlayerController,FirstWidget, EMouseLockMode::LockInFullscreen, false);
+	
 	}
+	else
+	{
+		AbilityTreeInstance->SetVisibility(ESlateVisibility::Hidden);
+		UWidgetBlueprintLibrary:: SetInputMode_GameOnly(PlayerController,false);
+		PlayerController->SetShowMouseCursor(false);
+		AbilityTreeInstance->RemoveFromParent();
+		AbilityTreeInstance = nullptr;
+	}
+	
 }
 
 int32 AUTAD_UI_FPSCharacter::GetAbilityPoints() const

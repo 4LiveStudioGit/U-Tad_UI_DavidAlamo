@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "UTAD_UI_FPSCharacter.generated.h"
 
+class UWidget;
 class UAblityTree;
 class UGameOver;
 class UInputComponent;
@@ -150,6 +151,8 @@ public:
 	TSubclassOf<UUserWidget> AbilityTreeWidget;
 
 	UAblityTree* AbilityTreeInstance;
+
+	
 	
 	UFUNCTION(BlueprintCallable, Category = UI)
 	void CrosshairEnemyDetection();
@@ -194,5 +197,9 @@ private:
 	UPlayerHUD* PlayerHUDInstance;
 	UPROPERTY()
 	UGameOver* GameOverInstance;
+	UPROPERTY()
+	APlayerController* PlayerController;
+	UPROPERTY()
+	UWidget* FirstWidget;
 };
 
