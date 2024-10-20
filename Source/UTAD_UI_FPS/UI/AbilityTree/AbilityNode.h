@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "AbilityNode.generated.h"
 
+class UTextBlock;
 class UProgressBar;
 class AUTAD_UI_FPSCharacter;
 class UImage;
@@ -40,6 +41,17 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* ButtonActivateNode;
 
+	//Texto para indicar el numero de puntos para desbloquear la habilidad
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* PointsNeed;
+
+	//Texto para indicar el numero de puntos para desbloquear la habilidad
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* TextBlock_PointsNeed;
+
+	//Texto para indicar que no has desbloqueado la habilidad anterior
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* PreviousAbilityNeed;
 
 	//Control de tiempo. Para desbloquear las habilidades en función del tiempo que presionas el botón
 
@@ -62,10 +74,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Skill Tree")
 	void OnButtonReleased();
 
+	//Detecta el raton esta sobre el botón
+	UFUNCTION(BlueprintCallable, Category="Skill Tree")
+	void OnButtonHovered();
+
+	//Detecta el raton no esta sobre el botón
+	UFUNCTION(BlueprintCallable, Category="Skill Tree")
+	void OnButtonUnhovered();
+	
 	//ProgressBar para mostrar el tiempo que se mantiene presionado el botón
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UProgressBar> TimeBar;
 
+	
 	
 	//Puntos de coste para desbloquear la habilidad
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill Node")
@@ -86,6 +107,8 @@ private:
 
 	
 	TObjectPtr<AUTAD_UI_FPSCharacter> Player;
+
+	bool Ability_Unlock;
 
 	// Función interna para incrementar el tiempo
 	void IncrementHoldTime();
