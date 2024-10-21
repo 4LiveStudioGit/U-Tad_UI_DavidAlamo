@@ -50,7 +50,7 @@ void AUTAD_UI_FPS_Enemy::SetHealth(int NewHealth)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		AUTAD_UI_FPSCharacter* Player = Cast<AUTAD_UI_FPSCharacter>(PlayerController->GetPawn());
-		Player->SetAbilityPoints(-99);
+		Player->SetAbilityPoints(AbilityPoints * -1);
 		Destroy();
 	}
 }

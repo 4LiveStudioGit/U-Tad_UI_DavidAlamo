@@ -117,8 +117,8 @@ void UAbilityNode::OnButtonHovered()
 		{
 			
 			ImageAbility->SetBrushTintColor(FColor(0,0,0,128));
-			PointsNeed->SetVisibility(ESlateVisibility::Visible);
-			TextBlock_PointsNeed->SetVisibility(ESlateVisibility::Visible);
+			PointsNeed->SetVisibility(ESlateVisibility::HitTestInvisible);
+			TextBlock_PointsNeed->SetVisibility(ESlateVisibility::HitTestInvisible);
 			PointsNeed->SetText(FText::FromString(FString::FromInt(AbilityCost)));
 		}
 	}

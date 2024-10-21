@@ -48,6 +48,11 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stats)
+	int AbilityPoints;
+
 private:
 	UWidgetComponent* EnemyHealthBarComponent;
+
+
 };

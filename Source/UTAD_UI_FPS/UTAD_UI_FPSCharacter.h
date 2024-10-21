@@ -25,6 +25,7 @@ DECLARE_DELEGATE_TwoParams(FOnHealthChanged, int /*Health*/,int/*MaxHealth*/);
 DECLARE_DELEGATE(FPlayerHit/*PlayerHit*/);
 DECLARE_DELEGATE_OneParam(FCrossOverEnemy, bool /*CrosshairOverEnemy*/);
 DECLARE_DELEGATE(FOnAbilityPointsChanged/*AbilityPoints*/);
+DECLARE_DELEGATE(FTakeWeapon/*TakeWeapon*/);
 
 
 UCLASS(config=Game)
@@ -133,6 +134,7 @@ public:
 	FCrossOverEnemy OnCrosshairOverEnemy;
 	FPlayerHit OnPlayerHit;
 	FOnAbilityPointsChanged OnAbilityPointsChanged;
+	FTakeWeapon OnTakeWeapon;
 	
 
 
@@ -160,7 +162,7 @@ public:
 	void ToggleAbilityTree();
 	
 	//Puntos para desbloquear habilidades
-	int32 abilityPoints = 10;
+	int32 abilityPoints = 0;
 
 	int32 GetAbilityPoints() const;
 	bool SetAbilityPoints(int32 NewAbilityPoints);

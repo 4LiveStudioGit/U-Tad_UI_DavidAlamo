@@ -250,6 +250,7 @@ void AUTAD_UI_FPSCharacter::SetHasRifle(bool bNewHasRifle)
 	{
 		PlayerHUDInstance->ShowAll();
 		OnTotalBulletsChanged.ExecuteIfBound(TotalBullets);
+		OnTakeWeapon.ExecuteIfBound();
 	}
 }
 

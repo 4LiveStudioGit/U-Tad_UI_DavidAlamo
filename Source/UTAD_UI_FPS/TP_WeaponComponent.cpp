@@ -31,6 +31,7 @@ void UTP_WeaponComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	if (bIsReloading)
 	{
 		ReloadTimer += DeltaTime;
+		OnReloadTimer.ExecuteIfBound(ReloadTimer);
 
 	 //To test ReloadTimer
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), ReloadTimer));
@@ -118,7 +119,7 @@ void UTP_WeaponComponent::StartReload()
 
 	int playerBullets = Character->GetTotalBullets();
 	playerBullets += CurrentNumBullets;
-	DrawDebugSphere(GetWorld(),GetOwner()->GetActorLocation(),50,12,FColor::Red,true,2.f);
+	//DrawDebugSphere(GetWorld(),GetOwner()->GetActorLocation(),50,12,FColor::Red,true,2.f);
 
 	if (playerBullets <= CurrentNumBullets || CurrentNumBullets == MagazineSize)
 	{
@@ -144,6 +145,8 @@ void UTP_WeaponComponent::CompleteReload()
 	CurrentNumBullets = __min(MagazineSize, playerBullets);
 
 	Character->SetTotalBullets(playerBullets - CurrentNumBullets);
+
+	OnReloadCanceled.ExecuteIfBound();
 }
 
 void UTP_WeaponComponent::CancelReload()
@@ -154,6 +157,7 @@ void UTP_WeaponComponent::CancelReload()
 	}
 
 	bIsReloading = false;
+	OnReloadCanceled.ExecuteIfBound();
 }
 
 int UTP_WeaponComponent::GetMagazineSize()

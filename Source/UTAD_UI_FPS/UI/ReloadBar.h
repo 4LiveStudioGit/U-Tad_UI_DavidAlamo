@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "ReloadBar.generated.h"
 
+class AUTAD_UI_FPSCharacter;
 /**
  * 
  */
@@ -23,10 +24,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Hide();
 
+	
 private:
 
 	UFUNCTION(BlueprintCallable, Category="Reload")
 	void UpdateReloadBarValue(float NewValue);
+
+	UFUNCTION(BlueprintCallable, Category="Reload")
+	void CancelReload();
+
+
+	UFUNCTION(BlueprintCallable, Category="Reload")
+	void HasWeapon();
+
+	TObjectPtr<AUTAD_UI_FPSCharacter> PlayerCharacter;
 
 public:
 
